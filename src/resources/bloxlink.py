@@ -4,10 +4,10 @@ import importlib
 import json
 import logging
 import uuid
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from inspect import iscoroutinefunction
-from typing import Callable, Coroutine, Optional
-from dataclasses import dataclass
+from typing import Callable, Coroutine, Literal, Optional
 
 import hikari
 import redis.asyncio as redis  # pylint: disable=import-error
@@ -64,6 +64,17 @@ class GuildData:
     groupLock: dict = None
 
     premium: dict = None
+
+
+@dataclass(slots=True)
+class GroupLock:
+    """Representation of a grouplock entry."""
+
+    groupName: str = None
+    dmMessage: str = None
+    roleSets: list = None
+    verifiedAction: Literal["kick", "dm", None] = None
+    unverifiedAction: Literal["kick", "dm", None] = None
 
 
 class Bloxlink(yuyo.AsgiBot):
